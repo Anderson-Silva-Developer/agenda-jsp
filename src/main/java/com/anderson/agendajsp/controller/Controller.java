@@ -11,16 +11,18 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "Controller", value = "/main")
 public class Controller extends HttpServlet {
-    DAO dao=new DAO();
+    DAO dao = new DAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+        if (action.equals("/main")) {
+            contatos(request, response);
+        }
+    }
 
-        response.setContentType("text/html");
-        // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>"+"main"+"</h1>");
-        out.println("</body></html>");
+    protected void contatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("agenda.jsp");
     }
 
 }
