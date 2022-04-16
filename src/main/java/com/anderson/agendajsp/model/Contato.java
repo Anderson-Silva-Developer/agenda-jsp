@@ -1,18 +1,41 @@
 package com.anderson.agendajsp.model;
 
-public class JavaBeans {
+public class Contato {
     private int id;
     private String nome;
     private String fone;
     private  String email;
 
-    public JavaBeans() {}
+    public Contato() {}
 
-    public JavaBeans(int id, String nome, String fone, String email) {
-        this.id = id;
+    private Contato(String nome, String fone, String email) {
         this.nome = nome;
         this.fone = fone;
         this.email = email;
+    }
+    public static class  Build{
+        private int id;
+        private String nome;
+        private String fone;
+        private  String email;
+        public Build(){}
+        public Build nome(String nome){
+            this.nome=nome;
+            return this;
+        }
+        public Build fone(String fone){
+            this.fone=fone;
+            return this;
+        }
+        public Build email(String email){
+            this.email=email;
+            return this;
+        }
+        public Contato create(){
+            return new Contato(nome,fone,email);
+        }
+
+
     }
 
     public int getId() {
