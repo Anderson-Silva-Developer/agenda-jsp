@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-@WebServlet(urlPatterns = {"Controller", "/main", "/insert"})
+@WebServlet(urlPatterns = {"Controller", "/main", "/insert", "/select","/update"})
 public class Controller extends HttpServlet {
     DAO dao = new DAO();
 
@@ -23,22 +23,25 @@ public class Controller extends HttpServlet {
 
         if (action.equals("/main")) {
             contatos(request, response);
-        }
-        if (action.equals("/insert")) {
+        } else if (action.equals("/insert")) {
             novoContatos(request, response);
+        } else if (action.equals("/select")) {
+            listarContato(request, response);
         }
-        //todo:verificar exception
-//        else {
-//            response.sendRedirect("index.html");
-//        }
-
+        else if (action.equals("/update")) {
+            editarContato(request, response);
+        }
+        else {
+            //todo:verificar exception
+//                response.sendRedirect("index.html");
+        }
     }
 
     protected void contatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ArrayList<Contato> listaContatos=dao.listarContatos();
-        request.setAttribute("contatos",listaContatos);
-        RequestDispatcher rd=request.getRequestDispatcher("agenda.jsp");
-        rd.forward(request,response);
+        ArrayList<Contato> listaContatos = dao.listarContatos();
+        request.setAttribute("contatos", listaContatos);
+        RequestDispatcher rd = request.getRequestDispatcher("agenda.jsp");
+        rd.forward(request, response);
     }
 
     protected void novoContatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,6 +53,29 @@ public class Controller extends HttpServlet {
         dao.inserirContato(contato);
         response.sendRedirect("main");
 
+
+    }
+    protected void listarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id=request.getParameter("id");
+        Contato contato=new Contato.Build().id(Long.parseLong(id)).create();
+        dao.selecionarContato(contato);
+        request.setAttribute("id",contato.getId());
+        request.setAttribute("nome",contato.getNome());
+        request.setAttribute("fone",contato.getFone());
+        request.setAttribute("email",contato.getEmail());
+        RequestDispatcher rd = request.getRequestDispatcher("editar.jsp");
+        rd.forward(request, response);
+
+    }
+    protected void editarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Contato contato = new Contato.Build()
+                .id(Long.parseLong(request.getParameter("id")))
+                .nome(request.getParameter("nome"))
+                .fone(request.getParameter("fone"))
+                .email(request.getParameter("email"))
+                .create();
+        dao.updateContato(contato);
+        response.sendRedirect("main");
 
     }
 
