@@ -1,24 +1,29 @@
 package com.anderson.agendajsp.model;
 
 public class Contato {
-    private int id;
+    private Long id;
     private String nome;
     private String fone;
     private  String email;
 
     public Contato() {}
 
-    private Contato(String nome, String fone, String email) {
+    private Contato(Long id,String nome, String fone, String email) {
+        this.id=id;
         this.nome = nome;
         this.fone = fone;
         this.email = email;
     }
     public static class  Build{
-        private int id;
+        private Long id;
         private String nome;
         private String fone;
         private  String email;
         public Build(){}
+        public Build id(Long id){
+            this.id=id;
+            return this;
+        }
         public Build nome(String nome){
             this.nome=nome;
             return this;
@@ -32,17 +37,17 @@ public class Contato {
             return this;
         }
         public Contato create(){
-            return new Contato(nome,fone,email);
+            return new Contato(id,nome,fone,email);
         }
 
 
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -3,12 +3,14 @@ package com.anderson.agendajsp.controller;
 import com.anderson.agendajsp.model.DAO;
 import com.anderson.agendajsp.model.Contato;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 @WebServlet(urlPatterns = {"Controller", "/main", "/insert"})
@@ -33,7 +35,10 @@ public class Controller extends HttpServlet {
     }
 
     protected void contatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("agenda.jsp");
+        ArrayList<Contato> listaContatos=dao.listarContatos();
+        request.setAttribute("contatos",listaContatos);
+        RequestDispatcher rd=request.getRequestDispatcher("agenda.jsp");
+        rd.forward(request,response);
     }
 
     protected void novoContatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
