@@ -1,5 +1,7 @@
 package com.anderson.agendajsp.model;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class Contato {
     private Long id;
     private String nome;
@@ -40,6 +42,27 @@ public class Contato {
             return new Contato(id,nome,fone,email);
         }
 
+
+    }
+    public Contato  Build(HttpServletRequest request){
+        Contato contato = new Contato.Build()
+                .id(Long.parseLong(request.getParameter("id")))
+                .nome(request.getParameter("nome"))
+                .fone(request.getParameter("fone"))
+                .email(request.getParameter("email"))
+                .create();
+
+        return contato;
+
+    }
+    public Contato  BuildSemId(HttpServletRequest request){
+        Contato contato = new Contato.Build()
+                .nome(request.getParameter("nome"))
+                .fone(request.getParameter("fone"))
+                .email(request.getParameter("email"))
+                .create();
+
+        return contato;
 
     }
 
