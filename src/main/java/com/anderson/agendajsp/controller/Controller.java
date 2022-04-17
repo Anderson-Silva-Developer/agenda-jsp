@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-@WebServlet(urlPatterns = {"Controller", "/main", "/insert", "/select","/update"})
+@WebServlet(urlPatterns = {"Controller", "/main", "/insert", "/select", "/update", "/delete"})
 public class Controller extends HttpServlet {
     DAO dao = new DAO();
 
@@ -27,11 +27,11 @@ public class Controller extends HttpServlet {
             novoContatos(request, response);
         } else if (action.equals("/select")) {
             listarContato(request, response);
-        }
-        else if (action.equals("/update")) {
+        } else if (action.equals("/update")) {
             editarContato(request, response);
-        }
-        else {
+        } else if (action.equals("/delete")) {
+            deletarContato(request, response);
+        } else {
             //todo:verificar exception
 //                response.sendRedirect("index.html");
         }
@@ -55,18 +55,20 @@ public class Controller extends HttpServlet {
 
 
     }
+
     protected void listarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id=request.getParameter("id");
-        Contato contato=new Contato.Build().id(Long.parseLong(id)).create();
+        String id = request.getParameter("id");
+        Contato contato = new Contato.Build().id(Long.parseLong(id)).create();
         dao.selecionarContato(contato);
-        request.setAttribute("id",contato.getId());
-        request.setAttribute("nome",contato.getNome());
-        request.setAttribute("fone",contato.getFone());
-        request.setAttribute("email",contato.getEmail());
+        request.setAttribute("id", contato.getId());
+        request.setAttribute("nome", contato.getNome());
+        request.setAttribute("fone", contato.getFone());
+        request.setAttribute("email", contato.getEmail());
         RequestDispatcher rd = request.getRequestDispatcher("editar.jsp");
         rd.forward(request, response);
 
     }
+
     protected void editarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Contato contato = new Contato.Build()
                 .id(Long.parseLong(request.getParameter("id")))
@@ -75,6 +77,14 @@ public class Controller extends HttpServlet {
                 .email(request.getParameter("email"))
                 .create();
         dao.updateContato(contato);
+        response.sendRedirect("main");
+
+    }
+
+    protected void deletarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Contato contato = new Contato.Build().id(Long.parseLong(id)).create();
+        dao.deletarContato(contato);
         response.sendRedirect("main");
 
     }
